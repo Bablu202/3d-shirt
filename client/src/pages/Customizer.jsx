@@ -137,7 +137,11 @@ const Customizer = () => {
                   <Tab
                     key={tab.name}
                     tab={tab}
-                    handleClick={() => setActiveEditorTab(tab.name)}
+                    handleClick={() => {
+                      !activeEditorTab
+                        ? setActiveEditorTab(tab.name)
+                        : setActiveEditorTab("");
+                    }}
                   />
                 ))}
 
@@ -168,7 +172,10 @@ const Customizer = () => {
                 tab={tab}
                 isFilterTab
                 isActiveTab={activeFilterTab[tab.name]}
-                handleClick={() => handleActiveFilterTab(tab.name)}
+                handleClick={() => {
+                  handleActiveFilterTab(tab.name);
+                  setActiveEditorTab("");
+                }}
               />
             ))}
           </motion.div>
