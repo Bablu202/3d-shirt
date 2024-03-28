@@ -27,7 +27,14 @@ router.route("/").post(async (req, res) => {
     });
 
     const image = response.data.data[0].b64_json;
+    const imageData = Buffer.from(image, "base64");
 
+    // Set content type and attachment header to force download
+    res.set("Content-Type", "image/png");
+    res.set(
+      "Content-Disposition",
+      'attachment; filename="generated_image.png"'
+    );
     res.status(200).json({ photo: image });
   } catch (error) {
     console.error(error);
