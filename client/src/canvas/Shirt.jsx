@@ -1,3 +1,4 @@
+import React from "react";
 import { easing } from "maath";
 import { useSnapshot } from "valtio";
 import { useFrame } from "@react-three/fiber";
@@ -10,13 +11,14 @@ const Shirt = () => {
   const { nodes, materials } = useGLTF("/shirt_baked.glb");
 
   const logoTexture = useTexture(snap.logoDecal);
-  const fullTextue = useTexture(snap.fullDecal);
+  const fullTexture = useTexture(snap.fullDecal);
 
-  //to apply color to mesh in smooth way
   useFrame((state, delta) =>
     easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
   );
+
   const stateString = JSON.stringify(snap);
+
   return (
     <group key={stateString}>
       <mesh
@@ -31,9 +33,10 @@ const Shirt = () => {
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}
             scale={1}
-            map={fullTextue}
+            map={fullTexture}
           />
         )}
+
         {snap.isLogoTexture && (
           <Decal
             position={[0, 0.04, 0.15]}
