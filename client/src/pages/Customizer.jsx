@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSnapshot } from "valtio";
 
@@ -30,6 +30,19 @@ const Customizer = () => {
     stylishShirt: false,
   });
 
+  const tabsRef = useRef(null);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (tabsRef.current && !tabsRef.current.contains(event.target)) {
+        setActiveEditorTab("");
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   // show tab content depending on the activeTab
   const generateTabContent = () => {
     switch (activeEditorTab) {
@@ -131,16 +144,16 @@ const Customizer = () => {
             className="absolute top-0 left-0 z-10"
             {...slideAnimation("left")}
           >
-            <div className="flex items-center min-h-screen">
-              <div className="editortabs-container tabs">
+            <div className="flex items-center min-h-screen ">
+              <div ref={tabsRef} className="editortabs-container tabs ">
                 {EditorTabs.map((tab) => (
                   <Tab
                     key={tab.name}
                     tab={tab}
                     handleClick={() => {
-                      !activeEditorTab
-                        ? setActiveEditorTab(tab.name)
-                        : setActiveEditorTab("");
+                      activeEditorTab === tab.name
+                        ? setActiveEditorTab("")
+                        : setActiveEditorTab(tab.name);
                     }}
                   />
                 ))}
